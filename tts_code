@@ -1,6 +1,7 @@
 # gTTS 라이브러리 설치
 !pip install gtts
 
+# 필요한 라이브러리 임폴트
 import os
 from google.colab import files
 from gtts import gTTS
