@@ -1,0 +1,49 @@
+# gTTS 라이브러리 설치
+!pip install gtts
+
+import os
+from google.colab import files
+from gtts import gTTS
+import IPython.display as ipd
+
+# 음성 변환 함수
+def speak_text(text):
+    tts = gTTS(text=text, lang='ko')
+    filename = 'output.mp3'
+    tts.save(filename)
+    return filename
+
+# 텍스트 입력 받기
+def get_text_input():
+    text_input = input("음성으로 변환할 텍스트를 입력하세요: ")
+    if text_input:
+        audio_file = speak_text(text_input)
+        return audio_file  # 음성 파일 경로 반환
+    else:
+        print("텍스트를 입력하지 않았습니다.")
+        return None
+
+# 파일 업로드 및 내용 읽기
+def upload_file():
+    uploaded = files.upload()
+    for filename in uploaded.keys():
+        with open(filename, 'r', encoding='utf-8') as file:
+            file_content = file.read()
+            audio_file = speak_text(file_content)
+            return audio_file  # 음성 파일 경로 반환
+    return None
+
+# 선택지 제공
+audio_file = None  # 변수 초기화
+choice = input("1. 텍스트 입력\n2. 파일 업로드\n원하는 옵션의 번호를 입력하세요: ")
+if choice == '1':
+    audio_file = get_text_input()
+elif choice == '2':
+    audio_file = upload_file()
+else:
+    print("잘못된 선택입니다.")
+
+# 음성 재생
+if audio_file:
+    audio = ipd.Audio(audio_file)  # 음성 객체 생성
+    display(audio)  # 음성 재생
